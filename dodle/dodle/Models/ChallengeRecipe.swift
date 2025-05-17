@@ -14,8 +14,24 @@ class ChallengeRecipe: Identifiable, Hashable {
     var type: RecipeType
     var title: String
     var minimumGoal: String
-    var emotion: ChallengeEmotion
+    
+    // Int에서 Float으로 변경
+    var positiveEmotion: Float
+    var negativeEmotion: Float
+    
+    var emotionPair: EmotionPair {
+        get {
+            EmotionPair(positive: positiveEmotion, negative: negativeEmotion)
+        }
+        set {
+            positiveEmotion = newValue.positive
+            negativeEmotion = newValue.negative
+        }
+    }
+    
     var kick: Kick
+    
+    var completedEmotion: ChallengeEmotion
     var completedAt: Date
     var startedAt: Date?
     var isAlarmOn: Bool
@@ -47,7 +63,9 @@ class ChallengeRecipe: Identifiable, Hashable {
         type: RecipeType,
         title: String,
         minimumGoal: String,
-        emotion: ChallengeEmotion,
+        positiveEmotion: Float,
+        negativeEmotion: Float,
+        completedEmotion: ChallengeEmotion,
         kick: Kick,
         completedAt: Date,
         startedAt: Date? = nil,
@@ -60,7 +78,9 @@ class ChallengeRecipe: Identifiable, Hashable {
         self.type = type
         self.title = title
         self.minimumGoal = minimumGoal
-        self.emotion = emotion
+        self.positiveEmotion = positiveEmotion
+        self.negativeEmotion = negativeEmotion
+        self.completedEmotion = completedEmotion
         self.kick = kick
         self.completedAt = completedAt
         self.startedAt = startedAt
@@ -70,6 +90,18 @@ class ChallengeRecipe: Identifiable, Hashable {
         self.completedReview = completedReview
     }
 }
+
+
+struct EmotionPair {
+    var positive: Float
+    var negative: Float
+    
+    init(positive: Float, negative: Float) {
+        self.positive = min(max(positive, 0.0), 1.0)
+        self.negative = min(max(negative, 0.0), 1.0)
+    }
+}
+
 
 struct Kick : Identifiable, Codable {
     var id: UUID

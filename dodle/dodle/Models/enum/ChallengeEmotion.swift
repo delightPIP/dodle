@@ -7,6 +7,7 @@
 import Foundation
 
 enum ChallengeEmotion: String, CaseIterable, Identifiable, Codable {
+    case none
     case anxious
     case tense
     case intrigued
@@ -17,6 +18,7 @@ enum ChallengeEmotion: String, CaseIterable, Identifiable, Codable {
     
     var displayName: String {
         switch self {
+        case .none: return ""
         case .anxious: return "불안한"
         case .tense: return "긴장되는"
         case .intrigued: return "흥미로운"
@@ -27,6 +29,7 @@ enum ChallengeEmotion: String, CaseIterable, Identifiable, Codable {
     
     var displayImageName: String {
         switch self {
+        case .none: return ""
         case .anxious: return "noodle1"
         case .tense: return "noodle2"
         case .intrigued: return "noodle3"
