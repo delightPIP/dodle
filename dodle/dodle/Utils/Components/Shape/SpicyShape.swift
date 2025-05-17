@@ -133,7 +133,6 @@ struct OrangeShape: Shape {
 }
 
 #Preview {
-    
     ZStack {
         GreenInnerShape()
             .fill(.green)

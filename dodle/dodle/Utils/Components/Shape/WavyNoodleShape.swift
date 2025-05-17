@@ -23,17 +23,17 @@ struct SquareNoodleShape: Shape {
 }
 
 struct NoodleTestView: View {
-    @State private var progress1: CGFloat = 0.0
-    @State private var progress2: CGFloat = 0.5
+    @State private var negative: CGFloat = 0.0
+    @State private var positive: CGFloat = 0.5
     
     var body: some View {
         VStack {
             
-            WavyNoodleShape(progress: progress1, waveCount: 20)
-                .stroke(Color.noodle, lineWidth: 3 + 4 * progress2)
-                .frame(width: 200, height: 200)
-                .animation(.easeInOut(duration: 0.3), value: progress1)
-                .animation(.easeInOut(duration: 0.3), value: progress2)
+            WavyNoodleShape(progress: negative, waveCount: 20)
+                .stroke(Color.noodle, lineWidth: 3 + 6 * positive)
+                .frame(width: 300, height: 300)
+                .animation(.easeInOut(duration: 0.3), value: negative)
+                .animation(.easeInOut(duration: 0.3), value: positive)
                 .shadow(color: Color.cardGray, radius: 1, x: 1, y: 2)
             
             ZStack {
@@ -42,11 +42,11 @@ struct NoodleTestView: View {
                     .opacity(0.8)
                     .frame(width:300, height: 250)
                 
-                WavyNoodleShape(progress: progress1, waveCount: 16)
-                    .stroke(Color.noodle, lineWidth: 1 + 3 * progress2)
+                WavyNoodleShape(progress: negative, waveCount: 15)
+                    .stroke(Color.noodle, lineWidth: 1 + 2 * positive)
                     .frame(width: 300, height: 100)
-                    .animation(.easeInOut(duration: 0.3), value: progress1)
-                    .animation(.easeInOut(duration: 0.3), value: progress2)
+                    .animation(.easeInOut(duration: 0.3), value: negative)
+                    .animation(.easeInOut(duration: 0.3), value: positive)
                     .mask{
                         WaterShape()
                             .foregroundColor(Color.water)
@@ -54,15 +54,16 @@ struct NoodleTestView: View {
                     }
             }
             
+            
             VStack {
-                Text("설레이고 기대돼요")
-                Slider(value: $progress2, in: 0...1)
+                Text("progress2")
+                Slider(value: $positive, in: 0...1)
                     .padding(.horizontal)
             }
             
             VStack {
-                Text("불안하고 긴장돼요")
-                Slider(value: $progress1, in: 0...1)
+                Text("progress1")
+                Slider(value: $negative, in: 0...1)
                     .padding(.horizontal)
             }
             
@@ -102,40 +103,6 @@ struct WavyNoodleShape: Shape {
         return path
     }
 }
-
-//struct WavyNoodleShape: Shape {
-//    var progress: CGFloat // 0.0 ~ 1.0 사이 값
-//
-//    func path(in rect: CGRect) -> Path {
-//        var path = Path()
-//        let waveLength: CGFloat = 15
-//        let baseHeight: CGFloat = 10
-//        let waveHeight = baseHeight * (0.3 + progress) // progress가 작을수록 더 높이
-//
-//        for y in stride(from: rect.minY, to: rect.maxY, by: waveLength) {
-//            path.move(to: CGPoint(x: rect.minX, y: y))
-//            var currentX = rect.minX
-//
-//            while currentX < rect.maxX {
-//                let midX = currentX + waveLength / 2
-//                let endX = currentX + waveLength
-//                let controlY = y + (currentX.truncatingRemainder(dividingBy: (2 * waveLength)) == 0 ? waveHeight : -waveHeight)
-//
-//                path.addQuadCurve(
-//                    to: CGPoint(x: endX, y: y),
-//                    control: CGPoint(x: midX, y: controlY)
-//                )
-//
-//                currentX = endX
-//            }
-//        }
-//
-//        return path
-//    }
-//}
-
-
-
 
 #Preview {
     NoodleTestView()

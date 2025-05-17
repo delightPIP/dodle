@@ -23,7 +23,7 @@ enum StepState: Int, CaseIterable {
         switch self {
         case .title: return "도전명을\n작성해주세요."
         case .minimumGoal: return "꼭 채워야 할 최소 목표를\n작성해주세요."
-        case .emotion: return "도전을 만들고 있는 지금\n어떤 감정이 제일 크게 느껴지시나요?"
+        case .emotion: return "도전을 만들고 있는 지금\n어떤 감정이 드나요?"
         case .kick: return "이 도전의 메인 요소는 뭔가요?\n메인 토핑을 선택 후 작성해주세요."
         case .completedAt: return "도전 레시피가 완성되어가고 있어요!\n시간이 얼마나 필요할까요?"
         }

@@ -13,7 +13,7 @@ enum SizeType: Int {
     case medium
     case large
     case xLarge
-    case XxLarge
+    case xxLarge
     
     var maxWidthSize : CGFloat {
         switch self {
@@ -22,7 +22,7 @@ enum SizeType: Int {
         case .medium: return 180
         case .large: return 240
         case .xLarge: return 300
-        case .XxLarge: return 360
+        case .xxLarge: return 360
         }
     }
     
@@ -33,7 +33,7 @@ enum SizeType: Int {
         case .medium: return 180
         case .large: return 240
         case .xLarge: return 300
-        case .XxLarge: return 360
+        case .xxLarge: return 360
         }
     }
     
@@ -44,14 +44,48 @@ enum SizeType: Int {
         case .medium: return 150
         case .large: return 200
         case .xLarge: return 250
-        case .XxLarge: return 300
+        case .xxLarge: return 300
+        }
+    }
+    
+    var waveHeight : CGFloat {
+        switch self {
+        case .xSmall: return 20
+        case .small: return 40
+        case .medium: return 60
+        case .large: return 80
+        case .xLarge: return 100
+        case .xxLarge: return 120
+        }
+    }
+    
+    var waveCount : CGFloat {
+        switch self {
+        case .xSmall: return 10
+        case .small: return 16
+        case .medium: return 17
+        case .large: return 18
+        case .xLarge: return 18
+        case .xxLarge: return 20
+        }
+    }
+    
+    var waveLineWidth : CGFloat {
+        switch self {
+        case .xSmall: return 1
+        case .small: return 1
+        case .medium: return 1
+        case .large: return 2
+        case .xLarge: return 2
+        case .xxLarge: return 2
         }
     }
 }
 
 struct RecipeCombineImage: View {
     var cookerImage: String
-    var noodleImage: String
+    var noodleImage: String = ""
+    var noodleSetting: EmotionPair
     var toppings: [String]
     var sizeType: SizeType = .small
     var spiceLevel: SpiceLevel
@@ -60,9 +94,9 @@ struct RecipeCombineImage: View {
     var willCompleteSoon: Bool = false
     var willTodayComplete: Bool = false
     
-    init(cupImage: String, noodleImage: String, toppings: [String], spiceLevel: SpiceLevel, sizeType: SizeType, isCompleted: Bool) {
+    init(cupImage: String, emotionPair: EmotionPair, noodleImage: ChallengeEmotion? = ChallengeEmotion.none, toppings: [String], spiceLevel: SpiceLevel, sizeType: SizeType, isCompleted: Bool) {
         self.cookerImage = cupImage
-        self.noodleImage = noodleImage
+        self.noodleSetting = emotionPair
         self.toppings = toppings
         self.spiceLevel = spiceLevel
         self.sizeType = sizeType
@@ -71,7 +105,8 @@ struct RecipeCombineImage: View {
     
     init(recipe: ChallengeRecipe, sizeType: SizeType){
         self.cookerImage = recipe.type.displayImageName
-        self.noodleImage = recipe.emotion.displayImageName
+        self.noodleSetting = recipe.emotionPair
+        self.noodleImage = recipe.completedEmotion.displayImageName
         self.toppings = [recipe.kick.preparation.displayImageName]
         self.spiceLevel = recipe.spiceLevel
         self.sizeType = sizeType
@@ -86,9 +121,6 @@ struct RecipeCombineImage: View {
             recipeImage(cookerImage)
             
             if isCompleted {
-                
-                
-//                recipeImage(noodleImage)
                 ZStack {
                     WaterShape()
                         .fill(spiceLevel.color)
@@ -96,15 +128,15 @@ struct RecipeCombineImage: View {
                         .frame(width: sizeType.width, height:sizeType.height)
                         .background(.clear)
                     
-                    WavyNoodleShape(progress: 0.5, waveCount: 16)
-                        .stroke(Color.noodle, lineWidth: 1 + 3 * 0.5,)
-                        .frame(width: 300, height: 100)
-                        .animation(.easeInOut(duration: 0.3), value: 0.5)
-                        .animation(.easeInOut(duration: 0.3), value: 0.5)
+                    WavyNoodleShape(progress: CGFloat(noodleSetting.negative), waveCount: Int(sizeType.waveCount))
+                        .stroke(Color.noodle.opacity(0.7), lineWidth: 1 + sizeType.waveLineWidth * CGFloat(noodleSetting.positive),)
+                        .frame(width: sizeType.width, height:sizeType.waveHeight)
+                        .animation(.easeInOut(duration: 0.3), value: noodleSetting.negative)
+                        .animation(.easeInOut(duration: 0.3), value: noodleSetting.positive)
                         .mask{
                             WaterShape()
                                 .foregroundColor(Color.water)
-                                .frame(width:300, height: 250)
+                                .frame(width: sizeType.width, height:sizeType.height)
                         }
                 }
                 
@@ -143,11 +175,11 @@ struct RecipeImage: View {
 
 
 #Preview {
-    RecipeCombineImage(recipe: ChallengeRecipe.sampleData[1], sizeType: .medium)
+    RecipeCombineImage(recipe: ChallengeRecipe.sampleData[3], sizeType: .xSmall)
     
-    RecipeCombineImage(cupImage: RecipeType.cup.displayImageName, noodleImage: ChallengeEmotion.intrigued.displayImageName, toppings: [PreparationType.resolution.displayImageName, "topping3"], spiceLevel: .medium, sizeType: .xLarge, isCompleted: true)
+    RecipeCombineImage(cupImage: RecipeType.cup.displayImageName, emotionPair: EmotionPair(positive: 0.9, negative: 0.8), toppings: [PreparationType.resolution.displayImageName, "topping3"], spiceLevel: .medium, sizeType: .xxLarge, isCompleted: true)
+    
     
     RecipeCombineImage(recipe: ChallengeRecipe.sampleData[2], sizeType: .medium)
 }
-
 

@@ -26,36 +26,6 @@ struct NoodleShape: Shape {
     }
 }
 
-
-//#Preview {
-//    ZStack {
-//        WaterShape()
-//            .fill(Color.blue.opacity(0.2)) // 물 색 배경 (선택)
-//        
-//        ZStack {
-//            ForEach(0..<20, id: \.self) { i in
-//                let offsetY = CGFloat(i) * 3 - 45 // 조밀하게
-//                let waveHeight = CGFloat.random(in: 3...6)
-//                let waveLength = CGFloat.random(in: 12...18)
-//                let phase = CGFloat.random(in: 0...2)
-//                
-//                NoodleShape(
-//                    offsetY: offsetY,
-//                    waveHeight: waveHeight,
-//                    waveLength: waveLength,
-//                    phase: phase
-//                )
-//                .stroke(Color.orange, lineWidth: 1.7)
-//            }
-//        }
-//        .clipShape(WaterShape()) // 물 모양 안에 면발만 보이게
-//    }
-//    .frame(width: 300, height: 200)
-//    .border(.red)
-//}
-
-
-
 struct AnimatedNoodleView: View {
     @State private var phase: CGFloat = 0.0
 
